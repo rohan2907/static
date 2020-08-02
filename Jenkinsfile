@@ -6,10 +6,11 @@ pipeline {
         echo 'Hello Word'
       }
     }
-stage('Lint HTML.'){
-                  steps {
-                        sh "tidy -q -e *.html"
-                  }
-            }
+stage('Upload to AWS.') {
+                steps {
+                    withAWS(region:'us-east-2',credentials:"aws-static") {
+                        s3Upload(file:'index.html', bucket:'arn:aws:s3:::elasticbeanstalk-us-east-2-315535007421', path:'index.html')
+                    }
+                }
   }
 }
